@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BI Dashboard - Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <h1>Business Intelligence Dashboard</h1>
+</header>
+
+<div class="container" style="text-align:center;">
+  <h2>Welcome to your Business Intelligence Insights Hub</h2>
+  <p>Analyze your monthly profit and loss visually with a clean, minimal dashboard.</p>
+  <img src="https://img.freepik.com/free-vector/data-analytics-concept-illustration_114360-1764.jpg" alt="Dashboard" width="400">
+  <br><br>
+  <a href="{{ url_for('dashboard') }}">
+    <button>Go to Dashboard</button>
+  </a>
+</div>
+</body>
+</html>

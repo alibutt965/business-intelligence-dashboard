@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BI Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard">
+
+  <nav class="navbar">
+    <h2>📊 BI Insights Dashboard</h2>
+    <a href="{{ url_for('home') }}" class="nav-btn">Home</a>
+  </nav>
+
+  <section class="form-card">
+    <h3>Enter Monthly Data</h3>
+    <form method="POST">
+      <input type="text" name="month" placeholder="Month (e.g. January)" required>
+      <input type="number" name="profit" placeholder="Profit" step="any" required>
+      <input type="number" name="loss" placeholder="Loss" step="any" required>
+      <button type="submit">Add Data</button>
+    </form>
+  </section>
+
+  <section class="data-card">
+    <h3>Monthly Performance</h3>
+    <table>
+      <thead>
+        <tr><th>Month</th><th>Profit</th><th>Loss</th><th>Net</th></tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>{{ row.month }}</td>
+          <td>{{ row.profit }}</td>
+          <td>{{ row.loss }}</td>
+          <td>{{ row.net }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="chart-card">
+    <h3>Profit vs Loss Overview</h3>
+    <canvas id="chart"></canvas>
+  </section>
+
+  <script>
+    const data = {{ data | tojson }};
+    const labels = data.map(d => d.month);
+    const profits = data.map(d => d.profit);
+    const losses = data.map(d => d.loss);
+    const net = data.map(d => d.net);
+
+    const ctx = document.getElementById('chart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Profit', data: profits, backgroundColor: '#4F46E5' },
+          { label: 'Loss', data: losses, backgroundColor: '#06B6D4' },
+          { label: 'Net', data: net, backgroundColor: '#10B981' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+
+</body>
+</html>
+
