@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Input | BI Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    nav { background-color: #4F46E5; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; text-decoration: none; background: #06B6D4; padding: 8px 16px; border-radius: 6px; }
+    section { margin: 30px auto; width: 80%; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; text-align: center; border-bottom: 1px solid #ddd; }
+    th { background-color: #4F46E5; color: white; }
+
+    .form-card, .kpi-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .form-card input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-card button {
+      background-color: #10B981;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .kpi-container { display: flex; justify-content: space-around; gap: 15px; }
+    .kpi-card {
+      flex: 1;
+      background-color: #4F46E5;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>📊 BI Insights Input</h2>
+    <a href="{{ url_for('graphs_page') }}">View Graphs</a>
+  </nav>
+
+  <!-- KPI Cards -->
+  <section class="kpi-container">
+    <div class="kpi-card">
+      <h4>Total Profit</h4>
+      <p id="totalProfit">0</p>
+    </div>
+    <div class="kpi-card" style="background-color:#06B6D4;">
+      <h4>Total Loss</h4>
+      <p id="totalLoss">0</p>
+    </div>
+    <div class="kpi-card" style="background-color:#10B981;">
+      <h4>Net Gain</h4>
+      <p id="netGain">0</p>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="form-card">
+    <h3>Enter Monthly Data</h3>
+    <form method="POST">
+      <input type="text" name="month" placeholder="Month (e.g. January)" required>
+      <input type="number" name="profit" placeholder="Profit" step="any" required>
+      <input type="number" name="loss" placeholder="Loss" step="any" required>
+      <button type="submit">Add Data</button>
+    </form>
+  </section>
+
+  <!-- Data Table -->
+  <section class="data-card">
+    <h3>Monthly Data Summary</h3>
+    <table>
+      <thead>
+        <tr><th>Month</th><th>Profit</th><th>Loss</th><th>Net</th></tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>{{ row.month }}</td>
+          <td>{{ row.profit }}</td>
+          <td>{{ row.loss }}</td>
+          <td>{{ row.net }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const data = {{ data | tojson }};
+    const profits = data.map(d => d.profit);
+    const losses = data.map(d => d.loss);
+
+    const totalProfit = profits.reduce((a,b)=>a+b,0);
+    const totalLoss = losses.reduce((a,b)=>a+b,0);
+    const netGain = totalProfit - totalLoss;
+
+    document.getElementById("totalProfit").innerText = totalProfit.toFixed(2);
+    document.getElementById("totalLoss").innerText = totalLoss.toFixed(2);
+    document.getElementById("netGain").innerText = netGain.toFixed(2);
+  </script>
+</body>
+</html>
