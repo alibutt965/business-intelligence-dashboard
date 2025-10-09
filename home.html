@@ -2,22 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BI Dashboard - Home</title>
+  <title>Home | BI Insights Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #4F46E5 30%, #06B6D4 100%);
+      color: white;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .home-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 60px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .home-container:hover {
+      transform: scale(1.03);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      color: #e5e7eb;
+    }
+
+    .nav-btn {
+      background-color: #10B981;
+      color: white;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    .nav-btn:hover {
+      background-color: #059669;
+      transform: translateY(-3px);
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+      color: rgba(255,255,255,0.7);
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Business Intelligence Dashboard</h1>
-</header>
+  <div class="home-container">
+    <h1>📊 Welcome to BI Insights Dashboard</h1>
+    <p>Visualize and analyze business performance through interactive charts and analytics.</p>
+   <a href="{{ url_for('input_page') }}" class="nav-btn">Go to Dashboard</a>
+  </div>
 
-<div class="container" style="text-align:center;">
-  <h2>Welcome to your Business Intelligence Insights Hub</h2>
-  <p>Analyze your monthly profit and loss visually with a clean, minimal dashboard.</p>
-  <img src="https://img.freepik.com/free-vector/data-analytics-concept-illustration_114360-1764.jpg" alt="Dashboard" width="400">
-  <br><br>
-  <a href="{{ url_for('dashboard') }}">
-    <button>Go to Dashboard</button>
-  </a>
-</div>
+  <div class="footer">
+    <p>Powered by Flask & Chart.js | Designed with 💡 and Data</p>
+  </div>
 </body>
 </html>
