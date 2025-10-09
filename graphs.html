@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Graphs | BI Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    nav { background-color: #4F46E5; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; text-decoration: none; background: #10B981; padding: 8px 16px; border-radius: 6px; }
+    section { margin: 30px auto; width: 80%; }
+    canvas { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>📈 BI Performance Charts</h2>
+    <a href="{{ url_for('input_page') }}">Back to Input</a>
+  </nav>
+
+  <section>
+    <h3>Profit vs Loss Overview</h3>
+    <canvas id="chart"></canvas>
+  </section>
+
+  <section>
+    <h3>Cumulative Net Trend</h3>
+    <canvas id="trendChart"></canvas>
+  </section>
+
+  <script>
+    const data = {{ data | tojson }};
+    const labels = data.map(d => d.month);
+    const profits = data.map(d => d.profit);
+    const losses = data.map(d => d.loss);
+    const net = data.map(d => d.net);
+    const cumulativeNet = net.map((sum => value => sum += value)(0));
+
+    new Chart(document.getElementById('chart'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Profit', data: profits, backgroundColor: '#4F46E5' },
+          { label: 'Loss', data: losses, backgroundColor: '#06B6D4' },
+          { label: 'Net', data: net, backgroundColor: '#10B981' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    new Chart(document.getElementById('trendChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Cumulative Net',
+          data: cumulativeNet,
+          borderColor: '#10B981',
+          backgroundColor: 'rgba(16,185,129,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body>
+</html>
