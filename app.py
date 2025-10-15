@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# In-memory data storage
 data = []
 
 @app.route('/')
@@ -26,3 +25,4 @@ def graphs_page():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
